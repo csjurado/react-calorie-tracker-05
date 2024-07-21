@@ -1,24 +1,9 @@
-import { Activity } from "../types";
-import { categories } from "../data/categories";
-import { useMemo, Dispatch } from "react";
 import { PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { ActivityActions } from "../reducers/activity-reducer";
+import { useAcivity } from "../hooks/UseActivity";
 
-type ActivityListProps = {
-  activities: Activity[];
-  dispatch: Dispatch<ActivityActions>;
-};
-const ActivityList = ({ activities, dispatch }: ActivityListProps) => {
-  const categoryName = useMemo(
-    () => (category: Activity["category"]) =>
-      categories.map((cat) => (cat.id === category ? cat.name : "")),
-    [activities]
-  );
+const ActivityList = () => {
+  const { state, dispatch, isEmptyActivities, categoryName } = useAcivity();
 
-  const isEmptyActivities = useMemo(
-    () => activities.length === 0,
-    [activities]
-  );
   return (
     <>
       <h2 className=" text-4xl font-bold text-slate-600 text-center">
@@ -31,7 +16,7 @@ const ActivityList = ({ activities, dispatch }: ActivityListProps) => {
           No hay actividades aún ....{" "}
         </p>
       ) : (
-        activities.map((activity) => (
+        state.activities.map((activity) => (
           <div
             key={activity.id}
             className="px-5 py-10 bg-white mt-5 flex justify-between shadow"
